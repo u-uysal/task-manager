@@ -12,7 +12,20 @@ MongoClient.connect(
     if (error) {
       return console.log("unable to connect to database!"); //we use return that because stop execution
     }
+    const db = client.db(databaseName); // for database manipulation
 
-    console.log("connected");
+    db.collection("users").insertOne(
+      {
+        name: "Ufuk",
+        age: 28,
+      },
+      (error, result) => {
+        if (error) {
+          return console.log("unable to insert user");
+        }
+
+        console.log(result.ops); // equal to what we add
+      }
+    );
   }
 );
