@@ -27,7 +27,7 @@ MongoClient.connect(
         console.log(result.ops); // equal to what we add
       }
     ); */
-    db.collection("users").insertMany(
+    /* db.collection("users").insertMany(
       [
         {
           name: "uysal",
@@ -36,6 +36,28 @@ MongoClient.connect(
         {
           name: "john",
           age: 22,
+        },
+      ],
+      (error, result) => {
+        if (error) {
+          return console.log("unable to insert user");
+        }
+        console.log(result.ops); // equal to what we add
+      }
+    ); */
+    db.collection("tasks").insertMany(
+      [
+        {
+          task: "clean your room",
+          isCompleted: true,
+        },
+        {
+          task: "work mongodb",
+          isCompleted: false,
+        },
+        {
+          task: "prepare for interview",
+          isCompleted: false,
         },
       ],
       (error, result) => {
