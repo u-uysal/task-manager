@@ -12,60 +12,18 @@ MongoClient.connect(
     if (error) {
       return console.log("unable to connect to database!"); //we use return that because stop execution
     }
+
     const db = client.db(databaseName); // for database manipulation
-    /* 
-    db.collection("users").insertOne(
-      {
-        name: "Ufuk",
-        age: 28,
-      },
-      (error, result) => {
+
+    db.collection("users")
+      .find({ name: "Ufuk" })
+      .toArray((error, user) => {
+        // get data from db
         if (error) {
-          return console.log("unable to insert user");
+          return console.log("unable to fetch");
         }
 
-        console.log(result.ops); // equal to what we add
-      }
-    ); */
-    /* db.collection("users").insertMany(
-      [
-        {
-          name: "uysal",
-          age: 23,
-        },
-        {
-          name: "john",
-          age: 22,
-        },
-      ],
-      (error, result) => {
-        if (error) {
-          return console.log("unable to insert user");
-        }
-        console.log(result.ops); // equal to what we add
-      }
-    ); */
-    db.collection("tasks").insertMany(
-      [
-        {
-          task: "clean your room",
-          isCompleted: true,
-        },
-        {
-          task: "work mongodb",
-          isCompleted: false,
-        },
-        {
-          task: "prepare for interview",
-          isCompleted: false,
-        },
-      ],
-      (error, result) => {
-        if (error) {
-          return console.log("unable to insert user");
-        }
-        console.log(result.ops); // equal to what we add
-      }
-    );
+        console.log(user);
+      });
   }
 );
