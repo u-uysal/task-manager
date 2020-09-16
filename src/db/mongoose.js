@@ -1,3 +1,5 @@
+//before run, make sure mongodb is still working
+
 const mongoose = require("mongoose");
 
 //url and db name
@@ -14,3 +16,16 @@ const User = mongoose.model("User", {
     type: Number,
   },
 });
+
+const me = new User({
+  name: "ufuk",
+  age: 28,
+});
+
+me.save()
+  .then(() => {
+    console.log(me); //{ _id: 5f61e8d4956fcf27934f9f9a, name: 'ufuk', age: 28, __v: 0 }
+  })
+  .catch((err) => {
+    console.log(err);
+  });
