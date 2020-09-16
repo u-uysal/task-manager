@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/u-uysal/task-manager#readme",
   "dependencies": {
-    "mongodb": "^3.6.2"
+    "mongodb": "^3.6.2",
+    "mongoose": "^5.10.5"
   }
 }

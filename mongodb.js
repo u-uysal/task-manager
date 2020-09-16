@@ -14,16 +14,5 @@ MongoClient.connect(
     }
 
     const db = client.db(databaseName); // for database manipulation
-
-    db.collection("users")
-      .find({ name: "Ufuk" })
-      .toArray((error, user) => {
-        // get data from db
-        if (error) {
-          return console.log("unable to fetch");
-        }
-
-        console.log(user);
-      });
   }
 );
