@@ -1,21 +1,11 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
+
 const User = mongoose.model("User", {
   name: {
     type: String,
     required: true,
     trim: true,
-  },
-  password: {
-    type: String,
-    required: true,
-    trim: true,
-    minlength: 7,
-    validate(value) {
-      if (value.toLowerCase().includes("password")) {
-        throw new Error("Password can not contain 'password' ");
-      }
-    },
   },
   email: {
     type: String,
@@ -28,9 +18,20 @@ const User = mongoose.model("User", {
       }
     },
   },
+  password: {
+    type: String,
+    required: true,
+    minlength: 7,
+    trim: true,
+    validate(value) {
+      if (value.toLowerCase().includes("password")) {
+        throw new Error('Password cannot contain "password"');
+      }
+    },
+  },
   age: {
     type: Number,
-    default: 0, // in case user did not enter age
+    default: 0,
     validate(value) {
       if (value < 0) {
         throw new Error("Age must be a postive number");
@@ -38,18 +39,5 @@ const User = mongoose.model("User", {
     },
   },
 });
-
-const me = new User({
-  name: "ufuk",
-  age: 28,
-});
-
-me.save()
-  .then(() => {
-    console.log(me);
-  })
-  .catch((err) => {
-    console.log(err);
-  });
 
 module.exports = User;
