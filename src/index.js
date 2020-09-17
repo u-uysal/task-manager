@@ -2,6 +2,7 @@ const express = require("express");
 require("./db/mongoose");
 const User = require("./models/user");
 const Task = require("./models/task");
+const { update } = require("./models/user");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -50,6 +51,16 @@ app.get("/users/:id", async (req, res) => {
 });
 
 app.patch("/users/:id", async (req, res) => {
+  const updates = Object.keys(req.body);
+  const allowedUpdates = ["name", "email", "password", "age"]; //user can change only this info
+
+  const isUptade = updates.every((update) => {
+    return allowedUpdates.includes(update);
+  });
+
+  if (!isUptade) {
+    return res.status(400).send("error : Invalid updates");
+  }
   try {
     const user = await User.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
