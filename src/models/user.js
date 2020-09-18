@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
-const bycrpt = require("bcryptjs");
+const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema({
   },
   email: {
     type: String,
+    unique: true,
     required: true,
     trim: true,
     lowercase: true,
@@ -41,20 +42,31 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-/* userSchema.pre() === doing sth before an event like before validation or before saving */
+userSchema.statics.findByCredentials = async (email, password) => {
+  const user = await User.findOne({ email });
 
-/* userSchema.post() === doing sth after an event like after validation or after saving */
-
-// first arg is name of the event and other function which is we want to implement
-// we did not use arrow function because binding has a important role.
-userSchema.pre("save", async function (next) {
-  const user = this; // value which is equal to the that's being saved
-
-  if (user.isModified("password")) {
-    user.password = await bycrpt.hash(user.password, 8); // 8 times will be bcrypted
+  if (!user) {
+    throw new Error("Unable to login");
   }
 
-  next(); // specify our work is done
+  const isMatch = await bcrypt.compare(password, user.password);
+
+  if (!isMatch) {
+    throw new Error("Unable to login");
+  }
+
+  return user;
+};
+
+// Hash the plain text password before saving
+userSchema.pre("save", async function (next) {
+  const user = this;
+
+  if (user.isModified("password")) {
+    user.password = await bcrypt.hash(user.password, 8);
+  }
+
+  next();
 });
 
 const User = mongoose.model("User", userSchema);
