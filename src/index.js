@@ -10,6 +10,17 @@ app.use(express.json());
 app.use(userRouter);
 app.use(taskRouter);
 
+//to allow all the routes except get request
+app.use((req, res, next) => {
+  console.log(req.method, req.path); // method :get path :user etc
+  if (req.method === "GET") {
+    res.send("Get requests are disabled");
+  } else {
+    next(); // if everthings is ok , run the router
+  }
+});
+
 app.listen(port, () => {
   console.log("Server is up on port " + port);
+  next(); // to run route handler
 });
