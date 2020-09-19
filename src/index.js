@@ -20,6 +20,11 @@ app.use((req, res, next) => {
   }
 });
 
+//
+app.use((req, res, next) => {
+  res.status(503).send("site is currently down .Check back soon!"); // no one allowed to run router
+});
+
 app.listen(port, () => {
   console.log("Server is up on port " + port);
   next(); // to run route handler
