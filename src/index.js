@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(userRouter);
 app.use(taskRouter);
 
-//to allow all the routes except get request
+/* //to allow all the routes except get request
 app.use((req, res, next) => {
   console.log(req.method, req.path); // method :get path :user etc
   if (req.method === "GET") {
@@ -24,8 +24,7 @@ app.use((req, res, next) => {
 app.use((req, res, next) => {
   res.status(503).send("site is currently down .Check back soon!"); // no one allowed to run router
 });
-
+ */
 app.listen(port, () => {
   console.log("Server is up on port " + port);
-  next(); // to run route handler
 });
