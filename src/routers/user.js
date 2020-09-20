@@ -28,13 +28,21 @@ router.post("/users/login", async (req, res) => {
   }
 });
 
-router.get("/users", auth, async (req, res) => {
+router.post("/users/logout", auth, async (req, res) => {
   try {
-    const users = await User.find({});
-    res.send(users);
+    req.user.tokens = req.user.tokens.filter((token) => {
+      // remove token which is used for login
+      return token.token !== req.token;
+    });
+    await req.user.save();
+    res.send();
   } catch (e) {
     res.status(500).send();
   }
+});
+
+router.get("/users/me", auth, async (req, res) => {
+  res.send(req.user); // to prevet a user see all other users's data
 });
 
 router.get("/users/:id", async (req, res) => {

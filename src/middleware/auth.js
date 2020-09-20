@@ -19,6 +19,9 @@ const auth = async (req, res, next) => {
     if (!user) {
       throw new Error();
     }
+    req.token = token;
+    req.user = user; // to send correct user as a respond
+    next(); // dont forget to run router when you use middleware
   } catch (error) {
     res.status(401).send({ error: "please authenticate" });
   }
