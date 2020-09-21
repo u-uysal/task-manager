@@ -15,11 +15,21 @@ router.post("/tasks", async (req, res) => {
 
 // GET /tasks?completed=true
 // GET /tasks?limit=10&skip=20
+
 router.get("/tasks", auth, async (req, res) => {
   const match = {};
+  const sort = {};
 
   if (req.query.completed) {
-    match.completed = Boolean(req.query.completed);
+    match.completed = req.query.completed === "true";
+  }
+
+  if (req.query.sortBy) {
+    // GET /tasks?sortBy=createdAt:desc
+    const parts = req.query.sortBy.split(":");
+
+    // 1 means ascending sorting , -1 means descendig sorting
+    sort[parts[0]] = parts[1] === "desc" ? -1 : 1;
   }
 
   try {
@@ -30,6 +40,7 @@ router.get("/tasks", auth, async (req, res) => {
         options: {
           limit: parseInt(req.query.limit),
           skip: parseInt(req.query.skip),
+          sort,
         },
       })
       .execPopulate();
@@ -38,6 +49,7 @@ router.get("/tasks", auth, async (req, res) => {
     res.status(500).send();
   }
 });
+
 // find the task which is user created
 router.get("/tasks/:id", auth, async (req, res) => {
   const _id = req.params.id;
