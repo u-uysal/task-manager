@@ -53,6 +53,7 @@ const userSchema = new mongoose.Schema(
     ],
   },
   {
+    // add timestamps to see when all task  created
     timestamps: true,
   }
 );
